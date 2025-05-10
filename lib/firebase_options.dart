@@ -41,13 +41,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAsjNt3xUGBu5JtrlR6iPJ2SO8-9QN5mI8',
-    appId: '1:709777904807:web:80b8111656350e437e3782',
-    messagingSenderId: '709777904807',
-    projectId: 'sup4-dev-trello-ef2e7',
-    authDomain: 'sup4-dev-trello-ef2e7.firebaseapp.com',
-    storageBucket: 'sup4-dev-trello-ef2e7.firebasestorage.app',
-    measurementId: 'G-GBYVTVZTC5',
+    apiKey: 'AIzaSyBzJrNpe_f8xmJKfUUmYSLHc4xmfBTgYk4',
+    appId: '1:543175099559:web:0a1e720aa97d0c4d6d8782',
+    messagingSenderId: '543175099559',
+    projectId: 'sup4-dev-trello',
+    authDomain: 'sup4-dev-trello.firebaseapp.com',
+    storageBucket: 'sup4-dev-trello.firebasestorage.app',
+    measurementId: 'G-SCD51FRM91',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
