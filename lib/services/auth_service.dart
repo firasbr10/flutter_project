@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';  // Ajout de Firestore pour stocker le username
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -11,11 +11,13 @@ class AuthService {
         email: email,
         password: password,
       );
-      // Ajouter le username dans Firestore
+
+      // Ajouter le username et le rôle dans Firestore
       if (userCredential.user != null) {
         await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
           'username': username,
           'email': email,
+          'role': 'user',  // Rôle par défaut
         });
       }
       return userCredential.user;

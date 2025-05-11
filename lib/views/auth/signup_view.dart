@@ -15,6 +15,7 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController _passwordController = TextEditingController();
   bool _loading = false;
   String? _error;
+  String _role = 'utilisateur'; // Rôle par défaut
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,23 @@ class _SignupViewState extends State<SignupView> {
               decoration: const InputDecoration(labelText: 'Mot de passe'),
               obscureText: true,
             ),
+            // Champ pour choisir le rôle (visible uniquement pour l'admin)
+            if (authProvider.user != null && authProvider.role == 'admin') 
+              DropdownButton<String>(
+                value: _role,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _role = newValue!;
+                  });
+                },
+                items: <String>['utilisateur', 'admin']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             const SizedBox(height: 20),
             _loading
                 ? const CircularProgressIndicator()
@@ -56,10 +74,19 @@ class _SignupViewState extends State<SignupView> {
                             _usernameController.text.trim(),
                             _emailController.text.trim(),
                             _passwordController.text.trim(),
+                            _role, // Passer le rôle sélectionné
                           )
                           .then((_) {
                         if (authProvider.user != null) {
-                          Navigator.pushReplacementNamed(context, '/dashboard');
+                          // Vérifier le rôle et rediriger en fonction du rôle
+                          String? role = authProvider.role; // Récupérer le rôle
+                          if (role == 'admin') {
+                            // Rediriger vers le dashboard admin
+                            Navigator.pushReplacementNamed(context, '/admin_dashboard');
+                          } else {
+                            // Rediriger vers le dashboard utilisateur
+                            Navigator.pushReplacementNamed(context, '/user_dashboard');
+                          }
                         } else {
                           setState(() {
                             _error = 'Erreur lors de l\'inscription';

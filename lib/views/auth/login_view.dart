@@ -17,7 +17,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Connexion')),
@@ -46,20 +46,31 @@ class _LoginViewState extends State<LoginView> {
                         _error = null;
                       });
 
-                      await authProvider
-                          .login(
-                            _emailController.text.trim(),
-                            _passwordController.text.trim(),
-                          )
-                          .then((_) {
-                        if (authProvider.user != null) {
-                          Navigator.pushReplacementNamed(context, '/dashboard');
+                      try {
+                        await authProvider.login(
+                          _emailController.text.trim(),
+                          _passwordController.text.trim(),
+                        );
+
+                        final user = authProvider.user;
+                        final role = authProvider.role;
+
+                        if (user != null && role != null) {
+                          if (role == 'admin') {
+                            Navigator.pushReplacementNamed(context, '/admin_dashboard');
+                          } else {
+                            Navigator.pushReplacementNamed(context, '/user_dashboard');
+                          }
                         } else {
                           setState(() {
-                            _error = 'Identifiants invalides';
+                            _error = 'Identifiants invalides ou rôle non défini.';
                           });
                         }
-                      });
+                      } catch (e) {
+                        setState(() {
+                          _error = 'Erreur lors de la connexion.';
+                        });
+                      }
 
                       setState(() {
                         _loading = false;
